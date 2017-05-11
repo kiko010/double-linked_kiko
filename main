@@ -1,0 +1,238 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <malloc.h>
+
+struct Node
+{
+    int data;
+    struct Node* pnext;
+    struct Node* pprev;
+};
+struct Node* pstart = NULL;
+struct Node* plast = NULL;
+
+/** Functions Prototype **/
+
+struct Node* CreatNode (void);
+void InsetFirst (int data);
+void InsertLast (int data);
+void PrintForward (void);
+void PrintBackward (void);
+struct Node* Search (int data);
+void DeleteNode (int Node );
+
+
+int main()
+{
+    int choice=-1 , data;
+    while (choice!=0)
+    {
+        printf("Choose from the following options\n\n");
+        printf("1-Insert at the beginning\n2-Append\n3-Print Forward\n4-Print Backward\n5-Search\n6-Delete\n");
+        scanf("%d",&choice);
+        if(choice==1)
+         {
+            printf("Enter Your Data\n");
+            scanf("%d",&data);
+            InsetFirst(data);
+            data =0;
+         }
+         else if (choice==2)
+         {
+            printf("Enter Your Data\n");
+            scanf("%d",&data);
+            InsertLast(data);
+            data =0;
+         }
+         else if(choice==3)
+         {
+             printf("The list from the beginning to the End :\n");
+             PrintForward();
+         }
+         else if(choice==4)
+         {
+             printf("The list from the end to the beginning\n");
+             PrintBackward();
+         }
+         else if(choice==5)
+         {
+             printf("Enter the data you want search\n");
+             scanf("%d",&data);
+             //Search(data);
+             if (Search(data))
+             {
+             printf("The item is : %d\n",(*(Search(data))).data);
+             data =0;
+             }
+         }
+         else if(choice==6)
+         {
+            printf("Enter The data you want to delete\n");
+            scanf("%d",&data);
+            DeleteNode(data);
+         }
+         else
+         {
+             printf("Enter a Valid Choice\n");
+         }
+    }
+
+    return 0;
+}
+
+/** Function to create Node in the list **/
+
+struct Node* CreatNode (void)
+{
+    struct Node* temp;
+    temp = (struct Node*) malloc(sizeof(struct Node));
+    if (!temp)
+    {
+        printf("\nNot Enough Memory\n");
+        return NULL;
+    }
+    else
+    {
+        return temp;
+    }
+}
+/**************************************************************************************/
+
+
+/** Function to Insert Node at the Beginning of the list **/
+
+void InsetFirst (int data)
+{
+    struct Node* temp;
+    temp = CreatNode();
+    temp ->data = data;
+    temp ->pnext = NULL;
+    temp ->pprev = NULL;
+    if (pstart == NULL)
+    {
+        pstart = temp;
+        plast = temp;
+    }
+    else
+    {
+        temp ->pnext = pstart;
+        pstart ->pprev =temp;
+        pstart = temp;
+    }
+}
+/***********************************************************************************/
+
+
+
+/** Function to Insert Node at the End of the List **/
+
+void InsertLast (int data)
+{
+    struct Node* temp;
+    temp = CreatNode();
+    temp ->data = data;
+    temp ->pnext = NULL;
+    temp ->pprev = NULL;
+    if (pstart == NULL)
+    {
+        pstart = temp;
+        plast = temp;
+    }
+    else
+    {
+        temp ->pprev = plast;
+        plast ->pnext = temp;
+        plast = temp;
+    }
+}
+/**********************************************************************************************/
+
+/** Function to Print the list From the beginning to the End **/
+
+void PrintForward (void)
+{
+    struct Node* current;
+    current = pstart;
+    printf("\nThe list From the Beginning to the End :\n");
+    while (current)
+    {
+        printf("\n%d",current->data);
+        current = current->pnext;
+    }
+    printf("\n");
+}
+/*********************************************************************************************/
+
+void PrintBackward (void)
+{
+    struct Node* current;
+    current = plast;
+    printf("\nThe list From End to the Beginning :\n");
+    while (current)
+    {
+        printf("\n%d",current->data);
+        current = current->pprev;
+    }
+    printf("\n");
+}
+/*********************************************************************************************/
+
+/** Function To Find a Given Data **/
+
+struct Node* Search (int data)
+{
+    struct Node* current;
+    current = pstart;
+    if (current)
+    {
+        while(current)
+        {
+            if (current->data == data)
+            {
+                return current;
+            }
+            current = current->pnext;
+        }
+    }
+    printf("\nIt's not found\n\n");
+    return NULL;
+
+}
+/**************************************************************************************/
+
+/** Function to Delete a Given Node **/
+
+void DeleteNode (int Node )
+{
+    struct Node* state;
+    state = Search(Node);
+
+    if (state)
+    {
+        if ((state == pstart) && (state == plast))
+        {
+            pstart = NULL;
+            plast = NULL;
+        }
+        else if (pstart == state)
+        {
+            pstart = state->pnext;
+            state->pnext->pprev = NULL;
+        }
+        else if (plast == state)
+        {
+            plast = state->pprev;
+            state->pprev->pnext = NULL;
+        }
+        else
+        {
+            state->pprev->pnext = state->pnext;
+            state->pnext->pprev = state->pprev;
+        }
+        free(state);
+    }
+    else
+    {
+        printf("NOT Found\n");
+    }
+}
