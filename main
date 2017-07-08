@@ -2,14 +2,17 @@
 #include <stdlib.h>
 #include <malloc.h>
 
+/****************************************/
+/** The main Node that Forms the  list **/
+/****************************************/
 struct Node
 {
     int data;
     struct Node* pnext;
     struct Node* pprev;
 };
-struct Node* pstart = NULL;
-struct Node* plast = NULL;
+struct Node* pstart = NULL;     /* A pointer that holds the beginning of the list */
+struct Node* plast = NULL;      /* A pointer that holds the End of the list */
 
 /** Functions Prototype **/
 
@@ -21,7 +24,7 @@ void PrintBackward (void);
 struct Node* Search (int data);
 void DeleteNode (int Node );
 
-
+/** Main Function **/
 int main()
 {
     int choice=-1 , data;
